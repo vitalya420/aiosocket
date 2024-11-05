@@ -24,6 +24,9 @@ class AIOSocket:
     async def recv(self, buffer_size: int) -> bytes:
         return await receive_from_nonblocking_socket(self.sock, buffer_size)
 
+    def set_timeout(self, timeout: float) -> None:
+        return self.sock.settimeout(timeout)
+
     @classmethod
     async def open_connection(
         cls,

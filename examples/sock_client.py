@@ -23,7 +23,10 @@ async def main():
 
     async def _task(use_proxy=True):
         async_sock = await AIOSocket.open_connection(
-            addr, ssl_context=ssl_context, server_hostname=host, socks5_addr=proxy if use_proxy else None
+            addr,
+            ssl_context=ssl_context,
+            server_hostname=host,
+            socks5_addr=proxy if use_proxy else None,
         )
         await async_sock.send(req)
         res = await read_http_response(async_sock)
@@ -46,7 +49,8 @@ async def main():
     res = await asyncio.gather(*[_task(use_proxy=False) for _ in range(200)])
     end = time.time()
     print(len(res), end - start)
-    # No tor proxy 200 responses in  6.0817389488220215
+    # No tor proxy 200 responses in 6.0817389488220215
+
 
 if __name__ == "__main__":
     asyncio.run(main())
