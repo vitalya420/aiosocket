@@ -34,7 +34,7 @@ class AIOSocket:
         ssl_context: Optional[ssl.SSLContext] = None,
         server_hostname: Optional[str] = None,
         socks5_addr: Optional[Tuple[str, int]] = None,
-        socks5_credentials: Optional[int] = None,
+        socks5_credentials: Optional[Tuple[str, str]] = None,
         *,
         loop: Optional[asyncio.AbstractEventLoop] = None,
     ):

