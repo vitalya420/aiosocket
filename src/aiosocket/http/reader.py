@@ -1,4 +1,5 @@
 import socket
+from select import select
 
 from aiosocket.async_socket import AIOSocket
 from .response import HTTPResponse
@@ -11,7 +12,7 @@ async def read_http_response(
     while b"\r\n\r\n" not in headers_buff:
         chunk = await sock.recv(1)
         if not chunk:
-            raise ConnectionError("Connection closed while reading headers")
+            raise ConnectionError(f"Connection closed while reading headers. Header Buff: {headers_buff}. {res}")
         headers_buff += chunk
 
     headers_str = headers_buff.decode("utf-8")
