@@ -35,7 +35,8 @@ class AsyncSSLSocket(ssl.SSLSocket, AsyncSocket):
 
         while total_sent < need_to_send:
             try:
-                total_sent += super().send(data, flags)
+                sent = super().send(data, flags)
+                total_sent += sent
             except (ssl.SSLWantWriteError, ssl.SSLWantReadError):
                 await self.wait_until_writeable()
         return total_sent

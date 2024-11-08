@@ -17,5 +17,5 @@ class ServerMessage(BaseMessage, ABC):
 
     @classmethod
     @abstractmethod
-    def from_bytes(cls, data: bytes) -> typing.Self:
+    def from_bytes(cls, data: bytes) -> "ServerMessage":
         pass

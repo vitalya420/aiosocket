@@ -28,7 +28,7 @@ class HelloResponse(ServerMessage):
     method: Method
 
     @classmethod
-    def from_bytes(cls, data: bytes) -> typing.Self:
+    def from_bytes(cls, data: bytes) -> "HelloResponse":
         if len(data) < 2:
             raise ValueError("Data must be at least 2 bytes long.")
 
@@ -71,7 +71,7 @@ class AuthenticationResponse(ServerMessage):
     status: int
 
     @classmethod
-    def from_bytes(cls, data: bytes) -> typing.Self:
+    def from_bytes(cls, data: bytes) -> "AuthenticationResponse":
         if len(data) < 2:
             raise ValueError("Data must be at least 2 bytes long.")
 

