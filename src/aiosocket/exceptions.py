@@ -1,4 +1,2 @@
-
-
 class NotAllowedError(Exception):
     pass

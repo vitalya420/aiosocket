@@ -20,7 +20,7 @@ from aiosocket.socks5.messages import (
 
 
 async def connect_to_proxy(
-        sock: socket.socket, addr: Tuple[str, int], credentials: Tuple[str, str]
+    sock: socket.socket, addr: Tuple[str, int], credentials: Tuple[str, str]
 ) -> None:
     sock.connect_ex(addr)
     method = (
@@ -50,7 +50,7 @@ async def connect_to_proxy(
 
 
 async def proxy_connect_to_address(
-        sock: socket.socket, remote_addr: Tuple[str, int]
+    sock: socket.socket, remote_addr: Tuple[str, int]
 ) -> None:
     request = Request(
         ver=SocksVersion.SOCKS5,
@@ -87,11 +87,11 @@ async def proxy_connect_to_address(
 
 
 async def create_nonblocking_socket_and_connect(
-        remote_addr: Tuple[str, int],
-        ssl_context: Optional[ssl.SSLContext] = None,
-        server_hostname: Optional[str] = None,
-        socks5_addr: Optional[Tuple[str, int]] = None,
-        socks5_credentials: Optional[Tuple[str, str]] = None,
+    remote_addr: Tuple[str, int],
+    ssl_context: Optional[ssl.SSLContext] = None,
+    server_hostname: Optional[str] = None,
+    socks5_addr: Optional[Tuple[str, int]] = None,
+    socks5_credentials: Optional[Tuple[str, str]] = None,
 ):
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     sock.setblocking(False)
@@ -121,10 +121,10 @@ async def create_nonblocking_socket_and_connect(
 
 
 def _socket_ready(
-        action: Literal["read", "write"],
-        sock_fd: int,
-        future: asyncio.Future,
-        loop: asyncio.AbstractEventLoop,
+    action: Literal["read", "write"],
+    sock_fd: int,
+    future: asyncio.Future,
+    loop: asyncio.AbstractEventLoop,
 ):
     func = {"read": loop.remove_reader, "write": loop.remove_writer}[action]
     func(sock_fd)
@@ -132,9 +132,9 @@ def _socket_ready(
 
 
 async def _wait_socket(
-        action: Literal["read", "write"],
-        sock_fd: int,
-        loop: Optional[asyncio.AbstractEventLoop] = None,
+    action: Literal["read", "write"],
+    sock_fd: int,
+    loop: Optional[asyncio.AbstractEventLoop] = None,
 ):
     loop = loop or asyncio.get_event_loop()
     func = {"read": loop.add_reader, "write": loop.add_writer}[action]
@@ -144,13 +144,13 @@ async def _wait_socket(
 
 
 async def wait_sock_ready_to_read(
-        sock_fd: int, loop: Optional[asyncio.AbstractEventLoop] = None
+    sock_fd: int, loop: Optional[asyncio.AbstractEventLoop] = None
 ):
     return await _wait_socket("read", sock_fd, loop)
 
 
 async def wait_sock_ready_to_write(
-        sock_fd: int, loop: Optional[asyncio.AbstractEventLoop] = None
+    sock_fd: int, loop: Optional[asyncio.AbstractEventLoop] = None
 ):
     return await _wait_socket("write", sock_fd, loop)
 
@@ -174,7 +174,7 @@ async def send_to_nonblocking_socket(sock: socket.socket, data: bytes) -> int:
 
 
 async def receive_from_nonblocking_socket(
-        sock: socket.socket, buffer_size: int
+    sock: socket.socket, buffer_size: int
 ) -> bytes:
     total_received = 0
     data = b""

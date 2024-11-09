@@ -43,14 +43,14 @@ class AsyncSSLSocket(ssl.SSLSocket, AsyncSocket):
 
     @classmethod
     def create(
-            cls,
-            sock,
-            server_side=False,
-            do_handshake_on_connect=True,
-            suppress_ragged_eofs=True,
-            server_hostname=None,
-            context=None,
-            session=None,
+        cls,
+        sock,
+        server_side=False,
+        do_handshake_on_connect=True,
+        suppress_ragged_eofs=True,
+        server_hostname=None,
+        context=None,
+        session=None,
     ):
         if sock.getsockopt(SOL_SOCKET, SO_TYPE) != SOCK_STREAM:
             raise NotImplementedError("only stream sockets are supported")
@@ -149,14 +149,22 @@ class AsyncSSLSocket(ssl.SSLSocket, AsyncSocket):
 
 
 async def wrap_async_socket(
-        sock,
-        server_side=False,
-        suppress_ragged_eofs=True,
-        server_hostname=None,
-        context=None,
-        session=None,
+    sock,
+    server_side=False,
+    suppress_ragged_eofs=True,
+    server_hostname=None,
+    context=None,
+    session=None,
 ):
-    instance = AsyncSSLSocket.create(sock, server_side, False, suppress_ragged_eofs, server_hostname, context, session)
+    instance = AsyncSSLSocket.create(
+        sock,
+        server_side,
+        False,
+        suppress_ragged_eofs,
+        server_hostname,
+        context,
+        session,
+    )
     await instance.wait_until_writeable()
     handshake_completed = False
     while not handshake_completed:
