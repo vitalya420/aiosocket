@@ -28,13 +28,15 @@ def random_operator():
     return random.choice(operator_codes)
 
 
-def random_phone_number():
+def random_phone_number(formatted=True):
     operator_code = random_operator()
     main_number = f"{random.randint(0, 9999999):07d}"
-    formatted_number = (
-        f"+38({operator_code}){main_number[:3]}-{main_number[3:5]}-{main_number[5:]}"
-    )
-    return formatted_number
+    if formatted:
+        formatted_number = (
+            f"+38({operator_code}){main_number[:3]}-{main_number[3:5]}-{main_number[5:]}"
+        )
+        return formatted_number
+    return f'+38{operator_code}{main_number}'
 
 
 def craft_request(phone_number):

