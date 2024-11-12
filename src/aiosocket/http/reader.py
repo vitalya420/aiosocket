@@ -13,7 +13,7 @@ async def read_http_response(
         chunk = await sock.recv(1)
         if not chunk:
             raise ConnectionError(
-                f"Connection closed while reading headers. Header Buff: {headers_buff}. {res}"
+                f"Connection closed while reading headers. Header Buff: {headers_buff}"
             )
         headers_buff += chunk
 
