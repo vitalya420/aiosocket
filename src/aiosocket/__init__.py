@@ -1,2 +1,1 @@
-def print_hello():
-    print("Hello World!")
+from aiosocket.aiosocket import AsyncSocket

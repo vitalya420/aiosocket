@@ -1,12 +1,11 @@
 import socket
 from select import select
 
-from aiosocket.async_socket import AIOSocket
 from .response import HTTPResponse
 
 
 async def read_http_response(
-    sock: socket.socket | AIOSocket,
+    sock: socket.socket,
 ) -> HTTPResponse:
     headers_buff = b""
     while b"\r\n\r\n" not in headers_buff:
