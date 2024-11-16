@@ -2,6 +2,8 @@ import socket
 import typing
 from dataclasses import dataclass, field
 
+from .exceptions import NoAcceptableMethods
+
 from .abc import ClientMessage, ServerMessage
 from .enums import SocksVersion, Method, Command, ATYP, ReplyStatus
 
@@ -36,6 +38,15 @@ class HelloResponse(ServerMessage):
         method = Method(data[1])
 
         return cls(ver=ver, method=method)
+
+    def raise_exception_if_occurred(self):
+        if self.method == Method.NO_ACCEPTABLE_METHODS:
+            raise NoAcceptableMethods(
+                "No acceptable methods are available. Have you forgot to provide your credentials?"
+            )
+
+    def requires_credentials(self):
+        return self.method == Method.USERNAME_PASSWORD
 
 
 @dataclass

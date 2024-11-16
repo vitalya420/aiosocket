@@ -1,7 +1,7 @@
 import asyncio
 import socket
 import ssl
-from typing import Tuple, Optional, Literal
+from typing import TYPE_CHECKING, Tuple, Optional, Literal
 
 from aiosocket.socks5.enums import Method, SocksVersion, Command, ATYP
 from aiosocket.socks5.exceptions import (
@@ -17,6 +17,9 @@ from aiosocket.socks5.messages import (
     Request,
     Reply,
 )
+
+if TYPE_CHECKING:
+    from .aiosocket2 import AsyncSocket
 
 
 async def connect_to_proxy(
@@ -193,3 +196,24 @@ async def receive_from_nonblocking_socket(
             await wait_sock_ready_to_read(sock.fileno())
 
     return data
+
+
+async def read_reply_bytes(async_socket: "AsyncSocket"):
+    initial_reply = await async_socket.recv(4)
+
+    if len(initial_reply) < 4:
+        raise ValueError("Incomplete SOCKS5 reply header received.")
+    atyp = ATYP(initial_reply[3])
+    if atyp == ATYP.IPV4:
+        remaining_length = 6
+    elif atyp == ATYP.DOMAIN_NAME:
+        domain_length_byte = await async_socket.recv(1)
+        domain_length = domain_length_byte[0] if domain_length_byte else 0
+        remaining_length = 1 + domain_length + 2
+    elif atyp == ATYP.IPV6:
+        remaining_length = 18
+    else:
+        raise ValueError("Invalid ATYP received.")
+    remaining_data = await async_socket.recv(remaining_length)
+    full_reply = initial_reply + remaining_data
+    return full_reply

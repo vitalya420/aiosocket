@@ -10,5 +10,13 @@ class AuthenticationError(Socks5Error):
     pass
 
 
+class ProxyAuthenticationError(Socks5Error):
+    pass
+
+
 class ProxyConnectionError(Socks5Error):
+    pass
+
+
+class ProxyError(Socks5Error):
     pass

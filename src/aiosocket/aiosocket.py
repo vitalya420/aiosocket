@@ -3,7 +3,10 @@ import socket
 from typing import Optional, Tuple
 
 from aiosocket.exceptions import NotAllowedError
-from aiosocket.utils import wait_sock_ready_to_write, wait_sock_ready_to_read, proxy_connect_to_address
+from aiosocket.utils import (
+    wait_sock_ready_to_write,
+    wait_sock_ready_to_read,
+)
 from aiosocket.socks5.messages import (
     Hello,
     HelloResponse,
@@ -36,7 +39,9 @@ class AsyncSocket(socket.socket):
     async def set_event_loop(self, loop: asyncio.AbstractEventLoop):
         self._loop = loop
 
-    async def socks5_connect(self, addr: Tuple[str, int], credentials: Optional[Tuple[str, str]] = None):
+    async def socks5_connect(
+        self, addr: Tuple[str, int], credentials: Optional[Tuple[str, str]] = None
+    ):
         if self.type == socket.SOCK_DGRAM:
             raise NotImplementedError("Socks5 proxy via udp not implemented yet")
         try:
@@ -50,12 +55,12 @@ class AsyncSocket(socket.socket):
             await self.send(hello)
             response_bytes = await self.recv(2)
             response = HelloResponse.from_bytes(response_bytes)
-            
+
             if response.method == Method.NO_ACCEPTABLE_METHODS:
                 raise NoAcceptableMethods(
                     "No acceptable methods are available. Have you forgot to provide your credentials?"
                 )
-            
+
             if response.method == Method.USERNAME_PASSWORD and credentials is not None:
                 username, password = credentials
                 auth_message = UsernamePassword(
@@ -75,7 +80,7 @@ class AsyncSocket(socket.socket):
             return await self._do_proxy_connect(address)
         super().connect_ex(address)
         await self.wait_until_writeable()
-    
+
     async def _do_proxy_connect(self, remote_addr):
         request = Request(
             ver=SocksVersion.SOCKS5,
@@ -85,7 +90,7 @@ class AsyncSocket(socket.socket):
             dst_port=remote_addr[1],
         )
         await self.send(request.to_bytes())
-        
+
         initial_reply = await self.recv(4)
 
         if len(initial_reply) < 4:

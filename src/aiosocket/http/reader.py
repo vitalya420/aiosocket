@@ -1,5 +1,4 @@
 import socket
-from select import select
 
 from .response import HTTPResponse
 
