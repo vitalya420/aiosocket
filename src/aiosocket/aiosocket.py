@@ -63,9 +63,7 @@ class AsyncSocket(socket.socket):
 
             if response.method == Method.USERNAME_PASSWORD and credentials is not None:
                 username, password = credentials
-                auth_message = UsernamePassword(
-                    SocksVersion.SOCKS5, username=username, password=password
-                )
+                auth_message = UsernamePassword(username=username, password=password)
                 await self.send(auth_message.to_bytes())
                 response_bytes = await self.recv(2)
                 if not AuthenticationResponse.from_bytes(response_bytes).is_ok():

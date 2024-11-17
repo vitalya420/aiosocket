@@ -1,5 +1,5 @@
 import ipaddress
-from typing import List, Optional, Tuple
+from typing import Optional, Tuple
 
 from .enums import Method, SocksVersion, ATYP, Command
 from .messages import (
@@ -42,9 +42,7 @@ def loads_hello_response(data: bytes) -> HelloResponse:
 
 
 def craft_username_password_message(username: str, password: str) -> UsernamePassword:
-    return UsernamePassword(
-        ver=SocksVersion.SOCKS5, username=username, password=password
-    )
+    return UsernamePassword(username=username, password=password)
 
 
 def loads_authentication_response(data: bytes) -> AuthenticationResponse:

@@ -1,6 +1,10 @@
 import asyncio
 import socket
-from aiosocket.aiosocket2 import AsyncSocket
+import ssl
+import time
+
+from aiosocket.aiosocket2 import AsyncSocket, AsyncSSLSocket, wrap_async_socket
+from aiosocket.http.reader import read_http_response
 
 
 async def bg_task():
@@ -10,26 +14,34 @@ async def bg_task():
         await asyncio.sleep(2)
 
 
-async def echo_for_client(conn):
-    print("connection", conn, conn.fileno())
-    while True:
-        print("recv")
-        data = await conn.recv(0xFFFF)
-        print("data", data)
-        if not data:
-            break
-        await conn.send(data)
+def timeit(f):
+
+    async def timed(*args, **kw):
+
+        ts = time.time()
+        result = await f(*args, **kw)
+        te = time.time()
+
+        print("func:%r args:[%r, %r] took: %2.4f sec" % (f.__name__, args, kw, te - ts))
+        return result
+
+    return timed
+
+
+HOST = "httpbin.org"
+ADDR = (HOST, 80)
+
+
+async def create_socket():
+    sock = AsyncSocket(socket.AF_INET, socket.SOCK_STREAM)
+    # await sock.socks5_connect(("127.0.0.1", 9050))
+    await sock.connect(ADDR)
+    return sock
 
 
 async def main():
-    loop = asyncio.get_event_loop()
-    # loop.create_task(bg_task())
-    sock = AsyncSocket(socket.AF_INET, socket.SOCK_STREAM)
-    sock.bind(("0.0.0.0", 12346))
-    sock.listen(5)
-    while True:
-        conn, _ = await sock.accept()
-        loop.create_task(echo_for_client(conn))
+    sock = await create_socket()
+    print(sock.getpeername())
 
 
 if __name__ == "__main__":

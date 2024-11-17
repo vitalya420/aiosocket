@@ -20,8 +20,8 @@ class Command(int, Enum):
 
 class ATYP(int, Enum):
     IPV4 = 0x01
-    DOMAIN_NAME = 0x02
-    IPV6 = 0x03
+    DOMAIN_NAME = 0x03
+    IPV6 = 0x04
 
 
 class ReplyStatus(int, Enum):

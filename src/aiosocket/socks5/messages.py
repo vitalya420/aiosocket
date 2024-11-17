@@ -51,7 +51,6 @@ class HelloResponse(ServerMessage):
 
 @dataclass
 class UsernamePassword(ClientMessage):
-    ver: SocksVersion
     username: str
     password: str
 
@@ -68,7 +67,7 @@ class UsernamePassword(ClientMessage):
             )
 
         return (
-            bytes([self.ver])
+            bytes([0x01])
             + bytes([username_length])
             + username
             + bytes([password_length])
@@ -78,7 +77,7 @@ class UsernamePassword(ClientMessage):
 
 @dataclass
 class AuthenticationResponse(ServerMessage):
-    ver: SocksVersion
+    ver: int
     status: int
 
     @classmethod
@@ -86,9 +85,8 @@ class AuthenticationResponse(ServerMessage):
         if len(data) < 2:
             raise ValueError("Data must be at least 2 bytes long.")
 
-        ver = SocksVersion(data[0])
+        ver = data[0]
         status = data[1]
-
         return cls(ver=ver, status=status)
 
     def is_ok(self) -> bool:

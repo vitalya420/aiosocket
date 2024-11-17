@@ -43,9 +43,7 @@ async def connect_to_proxy(
 
     if response.method == Method.USERNAME_PASSWORD and credentials is not None:
         username, password = credentials
-        auth_message = UsernamePassword(
-            SocksVersion.SOCKS5, username=username, password=password
-        )
+        auth_message = UsernamePassword(username=username, password=password)
         await send_to_nonblocking_socket(sock, auth_message.to_bytes())
         response_bytes = await receive_from_nonblocking_socket(sock, 2)
         if not AuthenticationResponse.from_bytes(response_bytes).is_ok():
